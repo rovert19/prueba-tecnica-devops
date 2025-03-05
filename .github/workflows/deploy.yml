@@ -1,0 +1,40 @@
+name: Build and deploy
+
+on:
+  push:
+    branches: [main]
+
+env:
+    APP_FOLDER: web-page-deploy-devops
+    AWS_REGION: us-east-1
+    S3_BUCKET: s3://web-devops-bucket
+
+jobs:
+  build:
+    name: Build react-app
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+            
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.18.x'
+    
+      - name: Compile react-app
+        working-directory: ${{ env.APP_FOLDER }}
+        run: npm ci && npm run build 
+    
+      - name: Upload artifact to S3
+        working-directory: ${{ env.APP_FOLDER }}
+        run: aws s3 sync --delete ./dist ${{ env.S3_BUCKET }}/dist
+    
+  
