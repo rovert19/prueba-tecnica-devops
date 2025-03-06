@@ -53,4 +53,4 @@ jobs:
       - name: Create deployment
         run: |
           commit_hash=`git rev-parse HEAD`
-          aws deploy create-deployment --application-name simple-react-app --deployment-group-name GISimpleReactApp --github-location repository=$GITHUB_REPOSITORY,commitID=$commit_hash
+          aws deploy create-deployment --application-name simple-react-app --deployment-group-name GISimpleReactApp --github-location repository=$GITHUB_REPOSITORY,commitId=$commit_hash
