@@ -38,6 +38,8 @@ jobs:
         with:
           projectBaseDir: web-page-deploy-devops/src
           args: >
+            -Dsonar.organization=rovert19
+            -Dsonar.projectKey=rovert19_prueba-tecnica-devops
             -Dsonar.verbose=true
 
       - name: Check Quality Status
