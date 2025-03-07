@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 
             
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -28,7 +30,28 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20.18.x'
-    
+      
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarqube-scan-action@v4
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          projectBaseDir: web-page-deploy-devops/src
+          args: >
+            -Dsonar.verbose=true
+
+      - name: Check Quality Status
+        id: check-quality-status
+        uses: rovert19/sonarcloud-quality-check@v0.1
+        with:
+          sonar-project-key: rovert19_prueba-tecnica-devops
+          sonar-token: ${{ secrets.SONAR_TOKEN }}
+          branch: main
+      
+      - name: Quality Status Result
+        run: |
+          echo "${{ steps.check-quality-status.outputs.project-status }}"
+
       - name: Compile react-app
         working-directory: ${{ env.APP_FOLDER }}
         run: npm ci && npm run build 
