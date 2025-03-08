@@ -76,12 +76,28 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
           aws-region: ${{ env.AWS_REGION }} 
 
-      - name: Allow execution permission
-        run: chmod -R +x ./.github
-
       - name: Create deployment
-        run: $GITHUB_WORKSPACE/.github/scripts/create_deploy.sh
         id: create-deployment
+        run: |
+          COMMIT_HASH=`git rev-parse HEAD`
+          DEPLOYMENT_ID=`aws deploy create-deployment --application-name simple-react-app \
+                      --deployment-group-name GISimpleReactApp \
+                      --github-location repository=$GITHUB_REPOSITORY,commitId=$COMMIT_HASH --query deploymentId --output text`
+          echo "DEPLOYMENT_ID=$DEPLOYMENT_ID" >> $GITHUB_OUTPUT
       
       - name: Deployment status
-        run: $GITHUB_WORKSPACE/.github/scripts/deploy_status.sh
+        run: |
+          while true;
+          do
+              STATUS=`aws deploy get-deployment --deployment-id ${{ steps.create-deployment.outputs.DEPLOYMENT_ID }} --query "deploymentInfo.[status]" --output text`
+              echo "Current status: $STATUS"
+
+              if [ "$STATUS" == "Succeeded" ]; then
+                  echo "Successful deployment"
+                  exit 0
+              elif [ "$STATUS" == "Failed" || "$STATUS" == "Stopped" ]; then
+                  echo "Failed deployment"
+                  exit 1
+              fi
+              sleep 10
+          done
