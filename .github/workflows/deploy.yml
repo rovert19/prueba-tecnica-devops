@@ -95,7 +95,8 @@ jobs:
               if [ "$STATUS" == "Succeeded" ]; then
                   echo "Successful deployment"
                   exit 0
-              elif [ "$STATUS" == "Failed" || "$STATUS" == "Stopped" ]; then
+              fi
+              if [ "$STATUS" == "Failed" || "$STATUS" == "Stopped" ]; then
                   echo "Failed deployment"
                   exit 1
               fi
