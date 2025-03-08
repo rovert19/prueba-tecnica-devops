@@ -2,7 +2,7 @@
 
 while true;
 do
-    STATUS=`aws deploy get-deployment --deployment-id ${{ steps.version.outputs.DEPLOYMENT_ID }} --query "deploymentInfo.[status]" --output text`
+    STATUS=`aws deploy get-deployment --deployment-id ${{ steps.create-deployment.outputs.DEPLOYMENT_ID }} --query "deploymentInfo.[status]" --output text`
     echo "Current status: $STATUS"
 
     if [ "$STATUS" == "Succeeded" ]; then
