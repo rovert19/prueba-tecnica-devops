@@ -96,7 +96,7 @@ jobs:
                   echo "Successful deployment"
                   exit 0
               fi
-              if [ "$STATUS" == "Failed" || "$STATUS" == "Stopped" ]; then
+              if [ "$STATUS" == "Failed" ] || [ "$STATUS" == "Stopped" ]; then
                   echo "Failed deployment"
                   exit 1
               fi
