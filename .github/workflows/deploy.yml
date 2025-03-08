@@ -80,8 +80,8 @@ jobs:
         run: chmod -R +x ./.github
 
       - name: Create deployment
-        run: $GITHUB_WORKSPACE/.github/scripts/create_deploy.sh
         id: create-deployment
+        run: $GITHUB_WORKSPACE/.github/scripts/create_deploy.sh
       
       - name: Deployment status
         run: $GITHUB_WORKSPACE/.github/scripts/deploy_status.sh
