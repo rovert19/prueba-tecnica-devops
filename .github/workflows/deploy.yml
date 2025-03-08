@@ -77,6 +77,9 @@ jobs:
           aws-region: ${{ env.AWS_REGION }} 
 
       - name: Create deployment
-        run: |
-          commit_hash=`git rev-parse HEAD`
-          aws deploy create-deployment --application-name simple-react-app --deployment-group-name GISimpleReactApp --github-location repository=$GITHUB_REPOSITORY,commitId=$commit_hash
+        run: $GITHUB_WORKSPACE/.github/create_deploy.sh
+      # run: |
+        #   commit_hash=`git rev-parse HEAD`
+        #   aws deploy create-deployment --application-name simple-react-app --deployment-group-name GISimpleReactApp --github-location repository=$GITHUB_REPOSITORY,commitId=$commit_hash
+      - name: Deployment status
+        run: $GITHUB_WORKSPACE/.github/deploy_status.sh
