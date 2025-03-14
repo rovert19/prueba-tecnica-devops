@@ -4,8 +4,7 @@ import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
-  const ACCESS_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxZjkyNGI1OWQ1ZDk5ZjNlNzI0MWVlNmM0NDg3MTgzOCIsIm5iZiI6MTczNDQ3MTYzMS4wNzIsInN1YiI6IjY3NjFlZmNmODg2" 
+  const [count, setCount] = useState(0) 
   return (
     <>
       <div>
